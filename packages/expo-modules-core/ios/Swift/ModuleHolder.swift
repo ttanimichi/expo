@@ -66,6 +66,7 @@ public final class ModuleHolder {
       let queue = function.queue ?? DispatchQueue.global(qos: .default)
 
       queue.async {
+        Log.debug("Calling function '\(functionName)' on module '\(self.name)'")
         function.call(args: args, promise: promise)
       }
     } catch let error as CodedError {

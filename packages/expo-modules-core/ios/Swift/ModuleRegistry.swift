@@ -13,6 +13,7 @@ public final class ModuleRegistry: Sequence {
    Registers an instance of module holder.
    */
   internal func register(holder: ModuleHolder) {
+    Log.notice("Registering module '\(holder.name)'")
     registry[holder.name] = holder
   }
 
@@ -47,7 +48,10 @@ public final class ModuleRegistry: Sequence {
   }
 
   public func unregister(moduleName: String) {
-    registry[moduleName] = nil
+    if registry[moduleName] != nil {
+      Log.notice("Unregistering module '\(moduleName)'")
+      registry[moduleName] = nil
+    }
   }
 
   public func has(moduleWithName moduleName: String) -> Bool {
@@ -67,12 +71,14 @@ public final class ModuleRegistry: Sequence {
   }
 
   internal func post(event: EventName) {
+    Log.trace("Posting '\(event)' event to registered modules")
     forEach { holder in
       holder.post(event: event)
     }
   }
 
   internal func post<PayloadType>(event: EventName, payload: PayloadType? = nil) {
+    Log.trace("Posting '\(event)' event to registered modules")
     forEach { holder in
       holder.post(event: event, payload: payload)
     }
