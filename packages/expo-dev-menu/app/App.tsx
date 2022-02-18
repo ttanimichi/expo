@@ -1,4 +1,5 @@
 import React from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { AppProviders } from './components/AppProviders';
 import { Main } from './components/Main';
@@ -11,8 +12,10 @@ type DevMenuInitialProps = {
 
 export function App({ devSettings, appInfo }: DevMenuInitialProps) {
   return (
-    <AppProviders appInfo={appInfo} devSettings={devSettings}>
-      <Main />
-    </AppProviders>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppProviders appInfo={appInfo} devSettings={devSettings}>
+        <Main />
+      </AppProviders>
+    </GestureHandlerRootView>
   );
 }
