@@ -25,7 +25,7 @@ public class ExpoReactDelegate: NSObject {
   public func createRootView(bridge: RCTBridge, moduleName: String, initialProperties: [AnyHashable: Any]?) -> UIView {
     return self.handlers.lazy
       .compactMap { $0.createRootView(reactDelegate: self, bridge: bridge, moduleName: moduleName, initialProperties: initialProperties) }
-      .first(where: { _ in true }) ?? RCTAppSetupDefaultRootView(bridge, moduleName, initialProperties)
+      .first(where: { _ in true }) ?? EXAppSetupDefaultRootView(bridge, moduleName, initialProperties)
   }
 
   @objc
