@@ -91,7 +91,7 @@ function TabNavigator() {
           top: 5,
         },
       }}
-      initialRouteName="test-suite">
+      initialRouteName="apis">
       {Object.keys(routes).map(name => (
         <Tab.Screen
           name={name}

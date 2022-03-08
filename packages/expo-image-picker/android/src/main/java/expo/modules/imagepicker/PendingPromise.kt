@@ -2,7 +2,7 @@ package expo.modules.imagepicker
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import expo.modules.core.Promise
+import expo.modules.kotlin.Promise
 
 /**
  * Class that represents a promise, which will not resolve immediately but saves results to the [PickerResultsStore].
@@ -25,16 +25,13 @@ class PendingPromise(
     throw IllegalArgumentException("Can not resolve 'DestroyedPromise' with anything else then 'Bundle'.")
   }
 
-  override fun reject(code: String, message: String, e: Throwable?) {
+  override fun reject(code: String, message: String?, cause: Throwable?) {
     pickerResultsStore.addPendingResult(
       bundleOf(
         "code" to code,
-        "message" to message
-      ).apply {
-        e?.let {
-          putString("exception", it.toString())
-        }
-      }
+        "message" to message,
+        "exception" to cause?.toString()
+      )
     )
   }
 }

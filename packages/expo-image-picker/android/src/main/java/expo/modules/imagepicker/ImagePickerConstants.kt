@@ -8,30 +8,6 @@ object ImagePickerConstants {
   const val REQUEST_LAUNCH_IMAGE_LIBRARY = 2
   const val MAXIMUM_QUALITY = 1.0
   const val CACHE_DIR_NAME = "ImagePicker"
-  const val PENDING_RESULT_EVENT = "ExpoImagePicker.onPendingResult"
-
-  const val ERR_MISSING_ACTIVITY = "ERR_MISSING_ACTIVITY"
-  const val MISSING_ACTIVITY_MESSAGE = "Activity which was provided during module initialization is no longer available"
-  const val ERR_MISSING_CONTEXT = "ERR_MISSING_CONTEXT"
-  const val MISSING_CONTEXT_MESSAGE = "Application context is not available"
-  const val ERR_MISSING_MODULE = "ERR_MISSING_MODULE"
-  const val MISSING_IMAGE_LOADER_MODULE_MESSAGE = "ImageLoader module is unavailable"
-  const val ERR_CAN_NOT_DEDUCE_TYPE = "ERR_CAN_NOT_DEDUCE_TYPE"
-  const val CAN_NOT_DEDUCE_TYPE_MESSAGE = "Can not deduce type of the returned file."
-  const val ERR_CAN_NOT_SAVE_RESULT = "ERR_CAN_NOT_SAVE_RESULT"
-  const val CAN_NOT_SAVE_RESULT_MESSAGE = "Can not save result to the file."
-  const val ERR_CAN_NOT_EXTRACT_METADATA = "ERR_CAN_NOT_EXTRACT_METADATA"
-  const val CAN_NOT_EXTRACT_METADATA_MESSAGE = "Can not extract metadata."
-  const val ERR_INVALID_OPTION = "ERR_INVALID_OPTION"
-  const val ERR_MISSING_URL = "ERR_MISSING_URL"
-  const val MISSING_URL_MESSAGE = "Intent doesn't contain `url`."
-  const val ERR_CAN_NOT_OPEN_CROP = "ERR_CAN_NOT_OPEN_CROP"
-  const val CAN_NOT_OPEN_CROP_MESSAGE = "Can not open the crop tool."
-  const val COROUTINE_CANCELED = "Coroutine canceled by module destruction."
-  const val PROMISES_CANCELED = "Module destroyed, all promises canceled."
-  const val UNKNOWN_EXCEPTION = "Unknown exception."
-  const val ERR_CROPPING_FAILURE = "ERR_CROPPING_FAILURE"
-  const val CROPPING_FAILURE_MESSAGE = "Cropping operation failed"
 
   val exifTags = arrayOf(
     arrayOf("string", ExifInterface.TAG_ARTIST),

@@ -61,7 +61,7 @@ class CellularModule : Module() {
     }
 
   private val context
-    get() = requireNotNull(appContext.reactContext)
+    get() = requireNotNull(appContext.reactContext, )
 
   @SuppressLint("MissingPermission")
   private fun getCurrentGeneration(): Int {

@@ -32,7 +32,7 @@ import expo.modules.google.signin.GoogleSignInPackage
 import expo.modules.haptics.HapticsPackage
 import expo.modules.imageloader.ImageLoaderPackage
 import expo.modules.imagemanipulator.ImageManipulatorPackage
-import expo.modules.imagepicker.ImagePickerPackage
+import expo.modules.imagepicker.ImagePickerModule
 import expo.modules.intentlauncher.IntentLauncherPackage
 import expo.modules.keepawake.KeepAwakePackage
 import expo.modules.kotlin.ModulesProvider
@@ -95,7 +95,6 @@ object ExperiencePackagePicker : ModulesProvider {
     HapticsPackage(),
     ImageLoaderPackage(),
     ImageManipulatorPackage(),
-    ImagePickerPackage(),
     IntentLauncherPackage(),
     KeepAwakePackage(),
     LocalAuthenticationPackage(),
@@ -144,6 +143,7 @@ object ExperiencePackagePicker : ModulesProvider {
   override fun getModulesList(): List<Class<out Module>> = listOf(
     CellularModule::class.java,
     ClipboardModule::class.java,
+    ImagePickerModule::class.java,
     LinearGradientModule::class.java
   )
 }

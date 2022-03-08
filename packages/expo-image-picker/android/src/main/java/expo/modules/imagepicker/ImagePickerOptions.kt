@@ -3,26 +3,38 @@ package expo.modules.imagepicker
 import android.content.Intent
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
+import expo.modules.kotlin.assertions.assertValueGreaterOrEqual
+import expo.modules.kotlin.assertions.assertValueInRange
+import expo.modules.kotlin.exception.CodedException
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 
 internal class ImagePickerOptions: Record {
-  /**
-   * TODO(@bbarthec): restore preventing numbers from outside valid range
-   */
   @Field
-  @FloatRange(from = 0.0, to = 1.0, fromInclusive = true, toInclusive = true)
+  @FloatRange(from = 0.0, to = 1.0)
   var quality: Double = 0.2
+    set(value) {
+      assertValueInRange(value, lowerBound = 0.0, upperBound = 1.0)
+      field = value
+    }
 
   @Field
   var allowsEditing: Boolean = false
 
   /**
-   * TODO(@bbarthec): prevent negative numbers
    * TODO(@bbarthec): undocumented
    */
   @Field
+  @IntRange(from = 0)
   var forceAspect: Pair<Int, Int>? = null
+    set(value) {
+      if (value != null) {
+        val (first, second) = value
+        assertValueGreaterOrEqual(first, 0)
+        assertValueGreaterOrEqual(second, 0)
+      }
+      field = value
+    }
 
   @Field
   var base64: Boolean = false
@@ -33,12 +45,13 @@ internal class ImagePickerOptions: Record {
   @Field
   var exif: Boolean = false
 
-  /**
-   * TODO(@bbarthec): prevent negative numbers
-   */
   @Field
   @IntRange(from = 0)
   var videoMaxDuration: Int = 0
+    set(value) {
+      assertValueGreaterOrEqual(value, 0)
+      field = value
+    }
 }
 
 enum class MediaTypes(val value: String) {

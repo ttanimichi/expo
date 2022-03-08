@@ -33,7 +33,7 @@ const LAUNCH_PICKER_PARAMETERS: FunctionParameter[] = [
         ],
         platforms: ['android'],
       },
-      { name: 'quality', type: 'number', values: [0, 0.2, 0.7, 1.0] },
+      { name: 'quality', type: 'number', values: [-0.2, 0.1, 0.7, 1.0] },
       { name: 'exif', type: 'boolean', initial: false },
       { name: 'base64', type: 'boolean', initial: false },
       {

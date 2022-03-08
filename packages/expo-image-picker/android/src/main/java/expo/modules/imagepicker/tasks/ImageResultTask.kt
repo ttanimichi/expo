@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import androidx.exifinterface.media.ExifInterface
-import expo.modules.core.Promise
 import expo.modules.core.errors.ModuleDestroyedException
-import expo.modules.imagepicker.ExifDataHandler
-import expo.modules.imagepicker.ImagePickerConstants
+import expo.modules.imagepicker.*
 import expo.modules.imagepicker.ImagePickerConstants.exifTags
 import expo.modules.imagepicker.exporters.ImageExporter
 import expo.modules.imagepicker.exporters.ImageExporter.Listener
 import expo.modules.imagepicker.fileproviders.FileProvider
+import expo.modules.kotlin.Promise
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -88,18 +87,18 @@ open class ImageResultTask(
           }
 
           override fun onFailure(cause: Throwable?) {
-            promise.reject(ImagePickerConstants.ERR_CAN_NOT_SAVE_RESULT, ImagePickerConstants.CAN_NOT_SAVE_RESULT_MESSAGE, cause)
+            promise.reject(FailedToSaveResultToFileException(cause))
           }
         }
         imageExporter.export(uri, outputFile, imageExporterHandler)
-      } catch (e: ModuleDestroyedException) {
-        Log.i(ImagePickerConstants.TAG, ImagePickerConstants.COROUTINE_CANCELED, e)
-        promise.reject(ImagePickerConstants.COROUTINE_CANCELED, e)
-      } catch (e: IOException) {
-        promise.reject(ImagePickerConstants.ERR_CAN_NOT_EXTRACT_METADATA, ImagePickerConstants.CAN_NOT_EXTRACT_METADATA_MESSAGE, e)
-      } catch (e: Exception) {
-        Log.e(ImagePickerConstants.TAG, ImagePickerConstants.UNKNOWN_EXCEPTION, e)
-        promise.reject(ImagePickerConstants.UNKNOWN_EXCEPTION, e)
+      } catch (cause: ModuleDestroyedException) {
+        Log.i(ImagePickerConstants.TAG, "Coroutine canceled by module destruction", cause)
+        promise.reject(ModuleDestroyedException(cause))
+      } catch (cause: IOException) {
+        promise.reject(FailedToExtractMetadataException(cause))
+      } catch (cause: Exception) {
+        Log.e(ImagePickerConstants.TAG, "Unexpected exception", cause)
+        promise.reject(UnexpectedException(cause))
       }
     }
   }

@@ -89,11 +89,16 @@ function convertObjectArgumentToString(arg: FunctionArgument, parameter: ObjectP
 function convertEnumArgumentToString(arg: FunctionArgument, { name, values }: EnumParameter) {
   // this should always find the current value for the enum, if failed something is messed up somewhere else
   // eslint-disable-next-line no-case-declarations
-  const value = values.find(({ value }) => value === arg);
+  const value = values.find(({ value }) =>
+    typeof value === 'object' && typeof arg === 'object'
+      ? JSON.stringify(value) === JSON.stringify(arg) // for tuple case
+      : value === arg
+  );
   if (!value) {
+    console.log(value, arg, values);
     throw new Error(
       `Value ${arg} not found in available values for enum parameter ${name}. Available values: ${values
-        .map((v) => `{${v.name} -> ${v.value}`)
+        .map((v) => `${v.name} -> ${v.value}`)
         .join(', ')}`
     );
   }

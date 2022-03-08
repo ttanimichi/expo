@@ -5,10 +5,13 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import expo.modules.core.Promise
 import expo.modules.core.errors.ModuleDestroyedException
+import expo.modules.imagepicker.FailedToExtractMetadataException
+import expo.modules.imagepicker.FailedToSaveResultToFileException
 import expo.modules.imagepicker.ImagePickerConstants
+import expo.modules.imagepicker.UnexpectedException
 import expo.modules.imagepicker.fileproviders.FileProvider
+import expo.modules.kotlin.Promise
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -57,20 +60,20 @@ class VideoResultTask(
           putInt("duration", extractMediaMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))
         }
         promise.resolve(response)
-      } catch (e: ModuleDestroyedException) {
-        Log.d(ImagePickerConstants.TAG, ImagePickerConstants.COROUTINE_CANCELED, e)
-        promise.reject(e)
-      } catch (e: NullPointerException) {
-        promise.reject(ImagePickerConstants.ERR_CAN_NOT_EXTRACT_METADATA, ImagePickerConstants.CAN_NOT_EXTRACT_METADATA_MESSAGE, e)
-      } catch (e: IllegalArgumentException) {
-        promise.reject(ImagePickerConstants.ERR_CAN_NOT_EXTRACT_METADATA, ImagePickerConstants.CAN_NOT_EXTRACT_METADATA_MESSAGE, e)
-      } catch (e: SecurityException) {
-        promise.reject(ImagePickerConstants.ERR_CAN_NOT_EXTRACT_METADATA, ImagePickerConstants.CAN_NOT_EXTRACT_METADATA_MESSAGE, e)
-      } catch (e: IOException) {
-        promise.reject(ImagePickerConstants.ERR_CAN_NOT_SAVE_RESULT, ImagePickerConstants.CAN_NOT_SAVE_RESULT_MESSAGE, e)
-      } catch (e: Exception) {
-        Log.e(ImagePickerConstants.TAG, ImagePickerConstants.UNKNOWN_EXCEPTION, e)
-        promise.reject(ImagePickerConstants.UNKNOWN_EXCEPTION, e)
+      } catch (cause: ModuleDestroyedException) {
+        Log.d(ImagePickerConstants.TAG, "Coroutine canceled by module destruction", cause)
+        promise.reject(expo.modules.imagepicker.ModuleDestroyedException(cause))
+      } catch (cause: NullPointerException) {
+        promise.reject(FailedToExtractMetadataException(cause))
+      } catch (cause: IllegalArgumentException) {
+        promise.reject(FailedToExtractMetadataException(cause))
+      } catch (cause: SecurityException) {
+        promise.reject(FailedToExtractMetadataException(cause))
+      } catch (cause: IOException) {
+        promise.reject(FailedToSaveResultToFileException(cause))
+      } catch (cause: Exception) {
+        Log.e(ImagePickerConstants.TAG, "Unexpected exception", cause)
+        promise.reject(UnexpectedException(cause))
       }
     }
   }

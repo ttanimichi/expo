@@ -38,12 +38,12 @@ class BrightnessModule(
   }
 
   @ExpoMethod
-  fun requestPermissionsAsync(promise: Promise?) {
+  fun requestPermissionsAsync(promise: Promise) {
     Permissions.askForPermissionsWithPermissionsManager(permissionModule, promise, Manifest.permission.WRITE_SETTINGS)
   }
 
   @ExpoMethod
-  fun getPermissionsAsync(promise: Promise?) {
+  fun getPermissionsAsync(promise: Promise) {
     Permissions.getPermissionsWithPermissionsManager(permissionModule, promise, Manifest.permission.WRITE_SETTINGS)
   }
 

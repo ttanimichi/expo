@@ -11,7 +11,6 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.core.os.bundleOf
 import com.canhub.cropper.CropImage
-import expo.modules.core.Promise
 import expo.modules.core.errors.ModuleDestroyedException
 import expo.modules.core.utilities.FileUtilities.generateOutputPath
 import expo.modules.core.utilities.ifNull
@@ -26,6 +25,7 @@ import expo.modules.imagepicker.tasks.VideoResultTask
 import expo.modules.interfaces.permissions.Permissions
 import expo.modules.interfaces.permissions.PermissionsResponse
 import expo.modules.interfaces.permissions.PermissionsStatus
+import expo.modules.kotlin.Promise
 import expo.modules.kotlin.events.OnActivityResultPayload
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
@@ -41,8 +41,7 @@ internal data class PickingContext(
 )
 
 class ImagePickerModule : Module() {
-  // TODO(@bbarthec) find solution to access nonnullable reactContext here
-  private val pickerResultStore: PickerResultsStore = PickerResultsStore(appContext.reactContext!!)
+  private lateinit var pickerResultStore: PickerResultsStore
   private val moduleCoroutineScope = CoroutineScope(Dispatchers.IO)
   private var exifDataHandler: ExifDataHandler? = null
 
@@ -82,6 +81,9 @@ class ImagePickerModule : Module() {
     return PickingContext(promise, options, pickingContext.cameraCaptureUri)
   }
 
+  private val context
+    get() = requireNotNull(appContext.reactContext)
+
 
   override fun definition() = ModuleDefinition {
     // TODO(@bbarthec): rename to ExpoImagePicker
@@ -112,24 +114,24 @@ class ImagePickerModule : Module() {
     // NOTE: Currently not reentrant / doesn't support concurrent requests
     function("launchCameraAsync") { options: ImagePickerOptions, promise: Promise ->
       val activity = appContext.activityProvider?.currentActivity.ifNull {
-        return@function promise.reject(ImagePickerConstants.ERR_MISSING_ACTIVITY, ImagePickerConstants.MISSING_ACTIVITY_MESSAGE)
+        return@function promise.reject(MissingCurrentActivityException())
       }
 
       val intentType = if (options.mediaTypes == MediaTypes.VIDEOS) MediaStore.ACTION_VIDEO_CAPTURE else MediaStore.ACTION_IMAGE_CAPTURE
       val cameraIntent = Intent(intentType)
       cameraIntent.resolveActivity(activity.application.packageManager).ifNull {
-        return@function promise.reject(IllegalStateException("Error resolving activity"))
+        return@function promise.reject(MissingActivityToHandleIntent(intentType))
       }
 
       appContext.permissions.ifNull {
-        return@function promise.reject("E_NO_PERMISSIONS", "Permissions module is null. Are you sure all the installed Expo modules are properly linked?")
+        return@function promise.reject(ModuleNotFoundException("Permissions"))
       }.askForPermissions({ permissionsResponse: Map<String, PermissionsResponse> ->
         if (permissionsResponse[Manifest.permission.WRITE_EXTERNAL_STORAGE]?.status == PermissionsStatus.GRANTED &&
           permissionsResponse[Manifest.permission.CAMERA]?.status == PermissionsStatus.GRANTED
         ) {
           launchCameraWithPermissionsGranted(promise, cameraIntent, options)
         } else {
-          promise.reject(SecurityException("User rejected permissions"))
+          promise.reject(UserRejectedPermissionsException())
         }
       }, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
     }
@@ -177,9 +179,14 @@ class ImagePickerModule : Module() {
 
     // region Module Lifecycle
 
+    onCreate {
+      // TODO: (@bbarthec) try to access this more elegantly, without !!
+      pickerResultStore = PickerResultsStore(appContext.reactContext!!)
+    }
+
     onDestroy {
       try {
-        moduleCoroutineScope.cancel(ModuleDestroyedException(ImagePickerConstants.PROMISES_CANCELED))
+        moduleCoroutineScope.cancel(ModuleDestroyedException("Module destroyed, all promises cancelled"))
       } catch (e: IllegalStateException) {
         Log.e(ImagePickerConstants.TAG, "The scope does not have a job in it")
       }
@@ -198,14 +205,11 @@ class ImagePickerModule : Module() {
 
   private fun launchCameraWithPermissionsGranted(promise: Promise, cameraIntent: Intent, options: ImagePickerOptions) {
     val activity = appContext.activityProvider?.currentActivity.ifNull {
-      return promise.reject(ImagePickerConstants.ERR_MISSING_ACTIVITY, ImagePickerConstants.MISSING_ACTIVITY_MESSAGE)
-    }
-    val context = appContext.reactContext.ifNull {
-      return promise.reject(ImagePickerConstants.ERR_MISSING_CONTEXT, ImagePickerConstants.MISSING_CONTEXT_MESSAGE)
+      return promise.reject(MissingCurrentActivityException())
     }
 
     val imageFile = createOutputFile(context.cacheDir, if (options.mediaTypes == MediaTypes.VIDEOS) ".mp4" else ".jpg").ifNull {
-      return promise.reject(IOException("Could not create image file."))
+      return promise.reject(FailedToCreateFileException())
     }
 
     val pickingContext = PickingContext(promise, options, uriFromFile(imageFile))
@@ -223,7 +227,7 @@ class ImagePickerModule : Module() {
 
   private fun startActivityForResult(intent: Intent, requestCode: Int, pickingContext: PickingContext) {
     appContext.activityProvider?.currentActivity.ifNull {
-      return pickingContext.promise.reject(ImagePickerConstants.ERR_MISSING_ACTIVITY, ImagePickerConstants.MISSING_ACTIVITY_MESSAGE)
+      return pickingContext.promise.reject(MissingCurrentActivityException())
     }.also {
       currentPickingContext = pickingContext
       // TODO(@bbarthec): is it needed while using Sweet API?
@@ -257,10 +261,10 @@ class ImagePickerModule : Module() {
     }
 
     val uri = (if (requestCode == ImagePickerConstants.REQUEST_LAUNCH_CAMERA) cameraCaptureUri else data?.data).ifNull {
-      return promise.reject(ImagePickerConstants.ERR_MISSING_URL, ImagePickerConstants.MISSING_URL_MESSAGE)
+      return promise.reject(MissingUrlException())
     }
     val type = getType(contentResolver, uri).ifNull {
-      return promise.reject(ImagePickerConstants.ERR_CAN_NOT_DEDUCE_TYPE, ImagePickerConstants.CAN_NOT_DEDUCE_TYPE_MESSAGE)
+      return promise.reject(FailedDeducingTypeException())
     }
 
     if (type.contains("image")) {
@@ -272,7 +276,7 @@ class ImagePickerModule : Module() {
 
   private fun handleCroppingResult(contentResolver: ContentResolver, onActivityResultPayload: OnActivityResultPayload, pickingContext: PickingContext) {
     val result = CropImage.getActivityResult(onActivityResultPayload.data).ifNull {
-      return pickingContext.promise.reject(ImagePickerConstants.ERR_CROPPING_FAILURE, ImagePickerConstants.CROPPING_FAILURE_MESSAGE)
+      return pickingContext.promise.reject(CroppingFailureException())
     }
 
     val (promise, options) = pickingContext
@@ -299,11 +303,7 @@ class ImagePickerModule : Module() {
     }
 
     val imageLoader = appContext.imageLoader.ifNull {
-      return promise.reject(ImagePickerConstants.ERR_MISSING_MODULE, ImagePickerConstants.MISSING_IMAGE_LOADER_MODULE_MESSAGE)
-    }
-
-    val context = appContext.reactContext.ifNull {
-      return promise.reject(ImagePickerConstants.ERR_MISSING_CONTEXT, ImagePickerConstants.MISSING_CONTEXT_MESSAGE)
+      return promise.reject(ModuleNotFoundException("ImageLoader"))
     }
 
     val exporter: ImageExporter = if (options.quality == ImagePickerConstants.MAXIMUM_QUALITY) {
@@ -327,18 +327,15 @@ class ImagePickerModule : Module() {
 
   private fun handleVideoResult(contentResolver: ContentResolver, pickingContext: PickingContext, uri: Uri) {
     val (promise) = pickingContext
-    val context = appContext.reactContext.ifNull {
-      return promise.reject(ImagePickerConstants.ERR_MISSING_CONTEXT, ImagePickerConstants.MISSING_CONTEXT_MESSAGE)
-    }
 
     try {
       val metadataRetriever = MediaMetadataRetriever().apply {
         setDataSource(context, uri)
       }
       VideoResultTask(promise, uri, contentResolver, CacheFileProvider(context.cacheDir, ".mp4"), metadataRetriever, moduleCoroutineScope).execute()
-    } catch (e: RuntimeException) {
-      e.printStackTrace()
-      return promise.reject(ImagePickerConstants.ERR_CAN_NOT_EXTRACT_METADATA, ImagePickerConstants.CAN_NOT_EXTRACT_METADATA_MESSAGE, e)
+    } catch (cause: RuntimeException) {
+      cause.printStackTrace()
+      return promise.reject(FailedToExtractMetadataException(cause))
     }
   }
 
@@ -378,18 +375,14 @@ class ImagePickerModule : Module() {
       }
     }
 
-    val context = appContext.reactContext.ifNull {
-      return promise.reject(ImagePickerConstants.ERR_MISSING_CONTEXT, ImagePickerConstants.MISSING_CONTEXT_MESSAGE)
-    }
-
     val fileUri: Uri = try {
       if (needGenerateFile) {
         uriFromFilePath(generateOutputPath(context.cacheDir, ImagePickerConstants.CACHE_DIR_NAME, extension))
       } else {
         uri
       }
-    } catch (e: IOException) {
-      return promise.reject(ImagePickerConstants.ERR_CAN_NOT_OPEN_CROP, ImagePickerConstants.CAN_NOT_OPEN_CROP_MESSAGE, e)
+    } catch (cause: IOException) {
+      return promise.reject(FailedToOpenCropToolException(cause))
     }
 
     val cropImageBuilder = CropImage.activity(uri).apply {

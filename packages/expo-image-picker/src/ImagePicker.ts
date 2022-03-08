@@ -6,6 +6,7 @@ import {
   createPermissionHook,
   UnavailabilityError,
   CodedError,
+  NativeModulesProxy,
 } from 'expo-modules-core';
 
 import ExponentImagePicker from './ExponentImagePicker';

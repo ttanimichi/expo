@@ -225,6 +225,7 @@ export declare type ImagePickerOptions = {
      * `1` means compress for maximum quality.
      * > Note: If the selected image has been compressed before, the size of the output file may be
      * > bigger than the size of the original image.
+     * @default 0.2
      */
     quality?: number;
     /**
@@ -235,10 +236,12 @@ export declare type ImagePickerOptions = {
     /**
      * Whether to also include the EXIF data for the image. On iOS the EXIF data does not include GPS
      * tags in the camera case.
+     * @default false
      */
     exif?: boolean;
     /**
      * Whether to also include the image data in Base64 format.
+     * @default false
      */
     base64?: boolean;
     /**
