@@ -4,6 +4,7 @@ import { Command } from '@expo/commander';
 import spawnAsync from '@expo/spawn-async';
 
 import { runExpoCliAsync } from '../ExpoCLI';
+import { EXPO_DIR } from '../Constants';
 
 type GenerateBareAppOptions = {
   template: string;
@@ -14,7 +15,7 @@ type GenerateBareAppOptions = {
 async function action(appName: string, packageNames: string[], options: GenerateBareAppOptions) {
   async function symlinkPackageManually(packageName: string) {
     const packagePath = path.resolve(projectDir, 'node_modules', packageName);
-    await fs.ensureSymlink(path.resolve(repoRoot, 'packages', packageName), packagePath);
+    await fs.ensureSymlink(path.resolve(EXPO_DIR, 'packages', packageName), packagePath);
   }
 
   // TODO:
@@ -24,7 +25,7 @@ async function action(appName: string, packageNames: string[], options: Generate
 
   const { clean, outDir = 'bare-apps', template = 'expo-template-bare-minimum' } = options;
 
-  const repoRoot = path.resolve(__dirname, '../../../');
+  
   const projectsDir = path.resolve(process.cwd(), outDir);
   const projectDir = path.resolve(process.cwd(), projectsDir, appName);
 
@@ -94,15 +95,15 @@ async function action(appName: string, packageNames: string[], options: Generate
 
   await runExpoCliAsync('prebuild', ['--clean'], { cwd: projectDir });
 
-  const ncl = path.resolve(repoRoot, 'apps/native-component-list');
+  const nclDir = path.resolve(EXPO_DIR, 'apps/native-component-list');
 
   await fs.copy(
-    path.resolve(ncl, 'metro.config.js'),
+    path.resolve(nclDir, 'metro.config.js'),
     path.resolve(projectDir, 'metro.config.js')
   );
 
   await fs.copy(
-    path.resolve(ncl, 'metro.transformer.js'),
+    path.resolve(nclDir, 'metro.transformer.js'),
     path.resolve(projectDir, 'metro.transformer.js')
   );
 
