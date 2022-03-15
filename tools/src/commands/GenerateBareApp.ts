@@ -101,12 +101,12 @@ async function action(appName: string, packageNames: string[], options: Generate
 
   const ncl = path.resolve(repoRoot, 'apps/native-component-list');
 
-  fs.copyFileSync(
+  await fs.copy(
     path.resolve(ncl, 'metro.config.js'),
     path.resolve(projectDir, 'metro.config.js')
   );
 
-  fs.copyFileSync(
+  await fs.copy(
     path.resolve(ncl, 'metro.transformer.js'),
     path.resolve(projectDir, 'metro.transformer.js')
   );
