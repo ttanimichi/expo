@@ -113,7 +113,7 @@ async function action(appName: string, packageNames: string[], options: Generate
 
   // for some reason prebuild is updating the gradle.properties FLIPPER_VERSION which causes SoLoader crash on launch
   const gradlePropertiesPath = path.resolve(projectDir, 'android', 'gradle.properties');
-  const gradleProperties = fs.readFileSync(gradlePropertiesPath, { encoding: 'utf-8' });
+  const gradleProperties = await fs.readFile(gradlePropertiesPath, { encoding: 'utf-8' });
   const updatedGradleProperies = gradleProperties.replace(
     `FLIPPER_VERSION=0.54.0`,
     `FLIPPER_VERSION=0.99.0`
