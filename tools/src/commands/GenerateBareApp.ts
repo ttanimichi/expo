@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import { Command } from '@expo/commander';
 import spawnAsync from '@expo/spawn-async';
+
 import { runExpoCliAsync } from '../ExpoCLI';
 
 type GenerateBareAppOptions = {
