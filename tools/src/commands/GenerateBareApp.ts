@@ -113,7 +113,7 @@ async function action(appName: string, packageNames: string[], options: Generate
     `FLIPPER_VERSION=0.54.0`,
     `FLIPPER_VERSION=0.99.0`
   );
-  fs.writeFileSync(gradlePropertiesPath, updatedGradleProperies);
+  await fs.outputFile(gradlePropertiesPath, updatedGradleProperies);
 }
 
 export default (program: Command) => {
