@@ -53,7 +53,6 @@ async function action(appName: string, packageNames: string[], options: Generate
     'expo-font',
     'expo-keep-awake',
     'expo-error-recovery',
-    'expo-modules-core',
     'expo-splash-screen',
     'expo-updates',
     'expo-dev-client',
