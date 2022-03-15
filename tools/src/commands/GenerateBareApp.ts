@@ -11,13 +11,9 @@ type GenerateBareAppOptions = {
 };
 
 async function action(appName: string, packageNames: string[], options: GenerateBareAppOptions) {
-  function symlinkPackageManually(packageName: string) {
+  async function symlinkPackageManually(packageName: string) {
     const packagePath = path.resolve(projectDir, 'node_modules', packageName);
-    if (fs.existsSync(packagePath)) {
-      fs.rmdirSync(path.resolve(projectDir, 'node_modules', packageName), { recursive: true });
-    }
-
-    fs.symlinkSync(path.resolve(repoRoot, 'packages', packageName), packagePath);
+    await fs.ensureSymlink(path.resolve(repoRoot, 'packages', packageName), packagePath);
   }
 
   // TODO:
