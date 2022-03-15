@@ -36,9 +36,7 @@ async function action(appName: string, packageNames: string[], options: Generate
   }
 
   if (clean) {
-    if (fs.existsSync(projectDir)) {
-      fs.rmdirSync(projectDir, { recursive: true });
-    }
+    await fs.remove(projectDir);
   }
 
   // these don't seem to symlink properly w/ expo-yarn-workspaces
