@@ -88,7 +88,7 @@ async function action(appName: string, packageNames: string[], options: Generate
     pkg['expo-yarn-workspaces']['symlinks'].push(packageName);
   });
 
-  fs.writeJsonSync(path.resolve(projectDir, 'package.json'), pkg);
+  await fs.outputJson(path.resolve(projectDir, 'package.json'), pkg);
 
   console.log('Yarning');
   await spawnAsync('yarn', [], { cwd: projectDir });
