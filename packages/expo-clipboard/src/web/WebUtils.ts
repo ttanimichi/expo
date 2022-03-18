@@ -65,8 +65,23 @@ export async function findImageInClipboardAsync(items: ClipboardItems): Promise<
   return null;
 }
 
+export async function findHtmlInClipboardAsync(items: ClipboardItems): Promise<Blob | null> {
+  for (const clipboardItem of items) {
+    if (clipboardItem.types.some((type) => type === 'text/html')) {
+      return await clipboardItem.getType('text/html');
+    }
+  }
+  return null;
+}
+
 export async function isClipboardPermissionDeniedAsync(): Promise<boolean> {
   const queryOpts = { name: 'clipboard-read' as PermissionName };
   const permissionStatus = await navigator.permissions.query(queryOpts);
   return permissionStatus.state === 'denied';
+}
+
+export function htmlToPlainText(html: string) {
+  const tempDivElement = document.createElement('div');
+  tempDivElement.innerHTML = html;
+  return tempDivElement.textContent || tempDivElement.innerText || '';
 }

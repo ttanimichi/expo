@@ -3,6 +3,7 @@ import {
   GetImageOptions,
   GetStringOptions,
   SetStringOptions,
+  StringFormat,
 } from '../Clipboard.types';
 import {
   ClipboardUnavailableException,
@@ -13,8 +14,10 @@ import {
 import {
   base64toBlob,
   blobToBase64Async,
+  findHtmlInClipboardAsync,
   findImageInClipboardAsync,
   getImageSizeFromBlobAsync,
+  htmlToPlainText,
   isClipboardPermissionDeniedAsync,
 } from './WebUtils';
 
@@ -22,10 +25,30 @@ export default {
   get name(): string {
     return 'ExpoClipboard';
   },
-  async getStringAsync(_options: GetStringOptions): Promise<string> {
+  async getStringAsync(options: GetStringOptions): Promise<string> {
     let text = '';
     try {
-      text = await navigator.clipboard.readText();
+      switch (options.preferredFormat) {
+        case StringFormat.HTML: {
+          const clipboardItems = await navigator.clipboard.read();
+          const blob = await findHtmlInClipboardAsync(clipboardItems);
+          if (!blob) {
+            return await navigator.clipboard.readText();
+          }
+          return await new Response(blob).text();
+        }
+        default: {
+          text = await navigator.clipboard.readText();
+          if (!text || text === '') {
+            const clipboardItems = await navigator.clipboard.read();
+            const blob = await findHtmlInClipboardAsync(clipboardItems);
+            text = (await blob?.text()) ?? '';
+            if (text.length > 0) {
+              text = htmlToPlainText(text);
+            }
+          }
+        }
+      }
     } catch (e) {
       // it might fail, because user denied permission
       if (e.name === 'NotAllowedError' || (await isClipboardPermissionDeniedAsync())) {
@@ -55,11 +78,48 @@ export default {
     document.body.removeChild(textField);
     return success;
   },
-  async setStringAsync(text: string, _options: SetStringOptions): Promise<boolean> {
-    return this.setString(text);
+  async setStringAsync(text: string, options: SetStringOptions): Promise<boolean> {
+    switch (options.inputFormat) {
+      case StringFormat.HTML: {
+        if (!navigator.clipboard) {
+          throw new ClipboardUnavailableException();
+        }
+
+        try {
+          // @ts-ignore `Blob` from `lib.dom.d.ts` and the one from `@types/react-native` differ
+          const blobInput = new Blob([text], { type: 'text/html' });
+          const clipboardItemInput = new ClipboardItem({ 'text/html': blobInput });
+          await navigator.clipboard.write([clipboardItemInput]);
+          return true;
+        } catch (e) {
+          // it might fail, because user denied permission
+          if (e.name === 'NotAllowedError' || (await isClipboardPermissionDeniedAsync())) {
+            throw new NoPermissionException();
+          }
+          throw new CopyFailureException(e.message);
+        }
+      }
+      default:
+        return this.setString(text);
+    }
   },
   async hasStringAsync(): Promise<boolean> {
-    return this.getStringAsync({}).then((text) => text.length > 0);
+    if (!navigator.clipboard) {
+      throw new ClipboardUnavailableException();
+    }
+
+    try {
+      const clipboardItems = await navigator.clipboard.read();
+      return clipboardItems
+        .flatMap((item) => item.types)
+        .some((type) => type === 'text/plain' || type === 'text/html');
+    } catch (e) {
+      // it might fail, because user denied permission
+      if (e.name === 'NotAllowedError' || (await isClipboardPermissionDeniedAsync())) {
+        throw new NoPermissionException();
+      }
+      throw e;
+    }
   },
   async getImageAsync(_options: GetImageOptions): Promise<ClipboardImage | null> {
     if (!navigator.clipboard) {
