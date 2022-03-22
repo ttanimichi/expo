@@ -12,8 +12,8 @@ import { LoadInitialData } from './components/LoadInitialData';
 import { Splash } from './components/Splash';
 import { AppProviders } from './providers/AppProviders';
 import { CrashReportScreen } from './screens/CrashReportScreen';
-import { EASUpdatesBranchScreen } from './screens/EASUpdatesBranchScreen';
-import { EASUpdatesScreen } from './screens/EASUpdatesScreen';
+import { EASBranchDetailsScreen } from './screens/EASBranchDetailsScreen';
+import { EASBranchesScreen } from './screens/EASBranchesScreen';
 import { ExtensionsScreen } from './screens/ExtensionsScreen';
 import { HomeScreen } from './screens/HomeScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
@@ -64,14 +64,14 @@ function Extensions() {
         options={{ header: () => null }}
       />
       <ExtensionsStack.Screen
-        name="EASUpdates"
+        name="All EAS Branches"
         options={{ headerTitle: 'EAS Update' }}
-        component={EASUpdatesScreen}
+        component={EASBranchesScreen}
       />
       <ExtensionsStack.Screen
-        name="Branch"
+        name="EAS Branch Details"
         options={{ headerTitle: 'Branch' }}
-        component={EASUpdatesBranchScreen}
+        component={EASBranchDetailsScreen}
       />
     </ExtensionsStack.Navigator>
   );

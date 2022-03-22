@@ -8,7 +8,7 @@ import { LoadMoreButton } from '../components/LoadMoreButton';
 import { useBuildInfo } from '../providers/BuildInfoProvider';
 import { Branch, useBranchesForApp } from '../queries/useBranchesForApp';
 
-export function EASUpdatesScreen() {
+export function EASBranchesScreen() {
   const navigation = useNavigation();
   const { appId } = useBuildInfo();
   const {
@@ -22,7 +22,7 @@ export function EASUpdatesScreen() {
   } = useBranchesForApp(appId);
 
   function onBranchPress(branchName: string) {
-    navigation.navigate('Branch', { branchName });
+    navigation.navigate('EAS Branch Details', { branchName });
   }
 
   function Header() {
