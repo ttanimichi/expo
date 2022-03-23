@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   Spacer,
@@ -25,10 +24,14 @@ import { ExtensionsStackParamList } from './ExtensionsStack';
 const extensions = ['updates'];
 const hasEASUpdatesInstalled = extensions.includes('updates');
 
-export function ExtensionsScreen() {
+type ExtensionsScreenProps = {
+  navigation: StackNavigationProp<ExtensionsStackParamList>;
+};
+
+export function ExtensionsScreen({ navigation }: ExtensionsScreenProps) {
   return (
     <View>
-      <AppHeader />
+      <AppHeader navigation={navigation} />
       <ScrollView contentContainerStyle={{ paddingBottom: scale['48'] }}>
         <View flex="1">
           {extensions.length === 0 && (
@@ -61,7 +64,7 @@ export function ExtensionsScreen() {
           {hasEASUpdatesInstalled && (
             <>
               <Spacer.Vertical size="medium" />
-              <EASUpdatesPreview />
+              <EASUpdatesPreview navigation={navigation} />
               <Spacer.Vertical size="medium" />
             </>
           )}
@@ -80,13 +83,9 @@ export function ExtensionsScreen() {
   );
 }
 
-type ExtensionsNavigationProp = StackNavigationProp<ExtensionsStackParamList, 'Extensions'>;
-
-function EASUpdatesPreview() {
+function EASUpdatesPreview({ navigation }: ExtensionsScreenProps) {
   const { appId } = useBuildInfo();
   const { isLoading, data: branches } = useBranchesForApp(appId);
-
-  const navigation = useNavigation<ExtensionsNavigationProp>();
 
   function onSeeAllBranchesPress() {
     navigation.navigate('Branches');
