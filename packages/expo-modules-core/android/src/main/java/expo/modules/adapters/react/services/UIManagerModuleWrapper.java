@@ -115,6 +115,14 @@ public class UIManagerModuleWrapper implements
     }
   }
 
+  @Override
+  public void runOnNativeModulesQueueThread(Runnable runnable) {
+    if (getContext().isOnNativeModulesQueueThread()) {
+      runnable.run();
+    } else {
+      getContext().runOnNativeModulesQueueThread(runnable);
+    }
+  }
 
   @Override
   public void registerLifecycleEventListener(final LifecycleEventListener listener) {

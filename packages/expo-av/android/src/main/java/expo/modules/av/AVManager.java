@@ -42,8 +42,6 @@ import expo.modules.av.video.VideoView;
 import expo.modules.av.video.VideoViewWrapper;
 import expo.modules.interfaces.permissions.Permissions;
 
-import com.facebook.react.bridge.ReactApplicationContext;
-
 import static android.media.MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED;
 
 public class AVManager implements LifecycleEventListener, AudioManager.OnAudioFocusChangeListener, MediaRecorder.OnInfoListener, AVManagerInterface, InternalModule {
@@ -73,7 +71,7 @@ public class AVManager implements LifecycleEventListener, AudioManager.OnAudioFo
     DUCK_OTHERS,
   }
 
-  private final ReactApplicationContext mContext;
+  private final Context mContext;
 
   private boolean mEnabled = true;
 
@@ -105,7 +103,7 @@ public class AVManager implements LifecycleEventListener, AudioManager.OnAudioFo
   private ModuleRegistry mModuleRegistry;
 
   public AVManager(final Context reactContext) {
-    mContext = (ReactApplicationContext) reactContext;
+    mContext = reactContext;
 
     mAudioManager = (AudioManager) reactContext.getSystemService(Context.AUDIO_SERVICE);
     // Implemented because of the suggestion here:
@@ -114,7 +112,7 @@ public class AVManager implements LifecycleEventListener, AudioManager.OnAudioFo
       @Override
       public void onReceive(Context context, Intent intent) {
         if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
-          mContext.runOnNativeModulesQueueThread(new Runnable() {
+          mModuleRegistry.getModule(UIManager.class).runOnNativeModulesQueueThread(new Runnable() {
             @Override
             public void run() {
               abandonAudioFocus();
@@ -167,7 +165,7 @@ public class AVManager implements LifecycleEventListener, AudioManager.OnAudioFo
 
   @Override
   public void onHostResume() {
-    mContext.runOnNativeModulesQueueThread(new Runnable() {
+    mModuleRegistry.getModule(UIManager.class).runOnNativeModulesQueueThread(new Runnable() {
       @Override
       public void run() {
         if (mAppIsPaused) {
@@ -187,7 +185,7 @@ public class AVManager implements LifecycleEventListener, AudioManager.OnAudioFo
 
   @Override
   public void onHostPause() {
-    mContext.runOnNativeModulesQueueThread(new Runnable() {
+    mModuleRegistry.getModule(UIManager.class).runOnNativeModulesQueueThread(new Runnable() {
       @Override
       public void run() {
         if (!mAppIsPaused) {
@@ -214,7 +212,7 @@ public class AVManager implements LifecycleEventListener, AudioManager.OnAudioFo
       mIsRegistered = false;
     }
 
-    mContext.runOnNativeModulesQueueThread(new Runnable() {
+    mModuleRegistry.getModule(UIManager.class).runOnNativeModulesQueueThread(new Runnable() {
       @Override
       public void run() {
         // remove all remaining sounds
