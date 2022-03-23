@@ -166,7 +166,7 @@ function BranchDetailsHeader({ branchName, updates, onOpenPress }: BranchDetails
   const { appId } = useBuildInfo();
   const { data: channels } = useChannelsForApp(appId);
 
-  const availableChannels: string[] = ['123', '321321'];
+  const availableChannels: string[] = [];
 
   channels?.forEach((channel) => {
     if (channel.branches.includes(branchName)) {
