@@ -38,6 +38,18 @@ jest.mock('react-native/Libraries/Components/Switch/Switch', () => {
 jest.mock('./bundle/native-modules/DevLauncherInternal');
 jest.mock('./bundle/native-modules/DevLauncherAuth');
 jest.mock('./bundle/native-modules/DevMenuPreferences');
+jest.mock('./bundle/providers/QueryProvider');
+jest.mock('@react-navigation/native', () => {
+  const actualReactNavigation = jest.requireActual('@react-navigation/native');
+  return {
+    ...actualReactNavigation,
+    useNavigation: () => {
+      return {
+        navigate: jest.fn(),
+      };
+    },
+  };
+});
 
 const MOCK_INITIAL_METRICS = {
   frame: {

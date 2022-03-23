@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   Spacer,
   View,
@@ -19,6 +20,7 @@ import { AppHeader } from '../components/AppHeader';
 import { EASBranchRow } from '../components/EASUpdatesRows';
 import { useBuildInfo } from '../providers/BuildInfoProvider';
 import { useBranchesForApp } from '../queries/useBranchesForApp';
+import { ExtensionsStackParamList } from './ExtensionsStack';
 
 const extensions = ['updates'];
 const hasEASUpdatesInstalled = extensions.includes('updates');
@@ -78,18 +80,20 @@ export function ExtensionsScreen() {
   );
 }
 
+type ExtensionsNavigationProp = StackNavigationProp<ExtensionsStackParamList, 'Extensions'>;
+
 function EASUpdatesPreview() {
   const { appId } = useBuildInfo();
   const { isLoading, data: branches } = useBranchesForApp(appId);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<ExtensionsNavigationProp>();
 
   function onSeeAllBranchesPress() {
-    navigation.navigate('All EAS Branches');
+    navigation.navigate('Branches');
   }
 
   function onBranchPress(branchName: string) {
-    navigation.navigate('EAS Branch Details', { branchName });
+    navigation.navigate('Updates', { branchName });
   }
 
   if (isLoading) {

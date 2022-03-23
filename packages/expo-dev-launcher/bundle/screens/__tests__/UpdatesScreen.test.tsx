@@ -1,4 +1,4 @@
-describe('<EASUpdatesScreen />', () => {
+describe('<UpdatesScreen />', () => {
   test.todo('render');
   test.todo('eas update row press');
   test.todo('see all branches press');
