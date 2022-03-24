@@ -103,6 +103,15 @@ function EASUpdatesPreview({ navigation }: ExtensionsScreenProps) {
     );
   }
 
+  if (branches.length === 0) {
+    return (
+      <View px="large">
+        <Spacer.Vertical size="large" />
+        <Heading color="secondary">This app has no published branches yet.</Heading>
+      </View>
+    );
+  }
+
   return (
     <View>
       <View mx="medium">

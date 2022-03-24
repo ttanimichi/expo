@@ -65,6 +65,15 @@ export function BranchesScreen({ navigation }: BranchesScreenProps) {
     );
   }
 
+  function EmptyList() {
+    return (
+      <View px="large">
+        <Spacer.Vertical size="large" />
+        <Heading color="secondary">This app has no published branches yet.</Heading>
+      </View>
+    );
+  }
+
   function renderBranch({ index, item: branch }: { index: number; item: Branch }) {
     const isFirst = index === 0;
     const isLast = index === branches?.length - 1;
@@ -89,6 +98,7 @@ export function BranchesScreen({ navigation }: BranchesScreenProps) {
         renderItem={renderBranch}
         keyExtractor={(item) => item?.id}
         ListFooterComponent={Footer}
+        ListEmptyComponent={EmptyList}
       />
     </View>
   );
@@ -155,7 +165,7 @@ function EmptyBranchesList({ branches, onBranchPress }: EmptyBranchesListProps) 
   );
 }
 
-function getIncompatibleBranchMessage(numberOfIncompatibleBranches: number) {
+export function getIncompatibleBranchMessage(numberOfIncompatibleBranches: number) {
   if (numberOfIncompatibleBranches === 1) {
     return `There is 1 branch that is not compatible with this development app. To preview it, download or build a development client that matches its runtime version.`;
   }
