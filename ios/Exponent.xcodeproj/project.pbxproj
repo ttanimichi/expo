@@ -246,7 +246,7 @@
 		B5D0D65F204F4BF500DDFC99 /* EXLog.m in Sources */ = {isa = PBXBuildFile; fileRef = B5D0D65D204F4BF400DDFC99 /* EXLog.m */; };
 		B5D0D673204F4C0400DDFC99 /* EXApiUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B5D0D661204F4C0400DDFC99 /* EXApiUtil.m */; };
 		B5D0D677204F4C0400DDFC99 /* EXFileDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5D0D66B204F4C0400DDFC99 /* EXFileDownloader.m */; };
-		B5D0D679204F4C0400DDFC99 /* EXReactAppManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5D0D66F204F4C0400DDFC99 /* EXReactAppManager.mm */; };
+		B5D0D679204F4C0400DDFC99 /* EXReactAppManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5D0D66F204F4C0400DDFC99 /* EXReactAppManager.mm */; settings = {COMPILER_FLAGS = "-fmodules -fcxx-modules"; }; };
 		B5D0D67A204F4C0400DDFC99 /* EXReactAppExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = B5D0D671204F4C0400DDFC99 /* EXReactAppExceptionHandler.m */; };
 		B5E49B571D1346FA00AA6436 /* Exponent.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = B5E49B551D1346FA00AA6436 /* Exponent.entitlements */; };
 		B5E49B631D1347B800AA6436 /* EXSDKVersions.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5E49B621D1347B800AA6436 /* EXSDKVersions.plist */; };
@@ -264,12 +264,12 @@
 		B5FB74AC1FF6DADC001C764B /* EXImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FB738F1FF6DADB001C764B /* EXImageUtils.m */; };
 		B5FB74B51FF6DADC001C764B /* EXUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FB73A11FF6DADB001C764B /* EXUtil.m */; };
 		B5FB74B61FF6DADC001C764B /* RNViewShot.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FB73A31FF6DADB001C764B /* RNViewShot.m */; };
-		B5FB74DE1FF6DADC001C764B /* EXVersionManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB73FC1FF6DADB001C764B /* EXVersionManager.mm */; };
+		B5FB74DE1FF6DADC001C764B /* EXVersionManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB73FC1FF6DADB001C764B /* EXVersionManager.mm */; settings = {COMPILER_FLAGS = "-fmodules -fcxx-modules"; }; };
 		B5FB74DF1FF6DADC001C764B /* EXDevSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FB74001FF6DADB001C764B /* EXDevSettings.m */; };
 		B5FB74E01FF6DADC001C764B /* EXDevSettingsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FB74021FF6DADB001C764B /* EXDevSettingsDataSource.m */; };
 		B5FB74E11FF6DADC001C764B /* EXDisabledDevLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FB74041FF6DADB001C764B /* EXDisabledDevLoadingView.m */; };
-		B5FB74E21FF6DADC001C764B /* EXDisabledDevMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB74061FF6DADB001C764B /* EXDisabledDevMenu.mm */; };
-		B5FB74E31FF6DADC001C764B /* EXDisabledRedBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB74081FF6DADB001C764B /* EXDisabledRedBox.mm */; };
+		B5FB74E21FF6DADC001C764B /* EXDisabledDevMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB74061FF6DADB001C764B /* EXDisabledDevMenu.mm */; settings = {COMPILER_FLAGS = "-fmodules -fcxx-modules"; }; };
+		B5FB74E31FF6DADC001C764B /* EXDisabledRedBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5FB74081FF6DADB001C764B /* EXDisabledRedBox.mm */; settings = {COMPILER_FLAGS = "-fmodules -fcxx-modules"; }; };
 		B5FB74E51FF6DADC001C764B /* EXAppState.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FB740C1FF6DADB001C764B /* EXAppState.m */; };
 		B5FB74E91FF6DADC001C764B /* EXNativeModuleIntrospection.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FB74141FF6DADB001C764B /* EXNativeModuleIntrospection.m */; };
 		B5FB74EA1FF6DADC001C764B /* EXScopedModuleRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FB74171FF6DADB001C764B /* EXScopedModuleRegistry.m */; };

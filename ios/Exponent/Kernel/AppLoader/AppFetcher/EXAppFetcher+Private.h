@@ -2,7 +2,8 @@
 
 #import <Foundation/Foundation.h>
 #import "EXAppFetcher.h"
-#import <EXManifests/EXManifestsManifest.h>
+
+@import EXManifests;
 
 NS_ASSUME_NONNULL_BEGIN
 

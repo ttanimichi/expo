@@ -2,10 +2,11 @@
 
 #import <XCTest/XCTest.h>
 
-#import <EXManifests/EXManifestsNewManifest.h>
 #import <EXUpdates/EXUpdatesNewUpdate.h>
 #import <EXUpdates/EXUpdatesDatabase.h>
 #import <EXUpdates/EXUpdatesBuildData+Tests.h>
+
+@import EXManifests;
 
 @interface EXUpdatesBuildDataTests : XCTestCase
 

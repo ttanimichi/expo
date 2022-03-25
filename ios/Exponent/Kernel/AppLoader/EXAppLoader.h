@@ -5,7 +5,8 @@
 #import "EXAppFetcherDevelopmentMode.h"
 #import "EXAppFetcherWithTimeout.h"
 #import "EXCachedResource.h"
-#import <EXManifests/EXManifestsManifest.h>
+
+@import EXManifests;
 
 @class EXKernelAppRecord;
 @class EXAppLoader;

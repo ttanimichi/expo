@@ -13,7 +13,8 @@
 #import "EXKernelAppRegistry.h"
 #import "EXKernelLinkingManager.h"
 #import "EXManifestResource.h"
-#import <EXManifests/EXManifestsManifestFactory.h>
+
+@import EXManifests;
 
 #import <React/RCTUtils.h>
 

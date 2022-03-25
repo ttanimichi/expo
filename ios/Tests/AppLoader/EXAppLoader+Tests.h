@@ -1,5 +1,7 @@
 #import "EXAppLoader.h"
-#import <EXManifests/EXManifestsManifest.h>
+
+@import EXManifests;
+
 
 #pragma mark - private/internal methods in App Loader & App Fetchers
 

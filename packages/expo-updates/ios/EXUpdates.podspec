@@ -22,6 +22,7 @@ Pod::Spec.new do |s|
   s.dependency 'EXManifests'
   s.dependency 'EASClientID'
   s.dependency 'ASN1Decoder', '~> 1.8'
+  s.dependency 'EXJSONUtils'
 
   s.pod_target_xcconfig = {
     'GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS' => 'YES',
