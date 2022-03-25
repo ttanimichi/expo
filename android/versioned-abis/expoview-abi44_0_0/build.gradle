@@ -180,4 +180,10 @@ dependencies {
 
   // react-native-webview
   implementation "androidx.webkit:webkit:1.4.0"
+
+  // expo-updates
+  implementation 'org.bouncycastle:bcutil-jdk15to18:1.70'
+
+  // expo-task-manager (because interface project is not autolinked)
+  implementation project(':unimodules-task-manager-interface')
 }
