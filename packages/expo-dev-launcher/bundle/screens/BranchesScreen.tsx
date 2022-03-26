@@ -3,6 +3,7 @@ import { Heading, View, Button, Divider, Spacer, Text } from 'expo-dev-client-co
 import * as React from 'react';
 
 import { EASBranchRow, EASEmptyBranchRow } from '../components/EASUpdatesRows';
+import { EmptyBranchesMessage } from '../components/EmptyBranchesMessage';
 import { FlatList } from '../components/FlatList';
 import { LoadMoreButton } from '../components/LoadMoreButton';
 import { useBuildInfo } from '../providers/BuildInfoProvider';
@@ -49,7 +50,7 @@ export function BranchesScreen({ navigation }: BranchesScreenProps) {
           onBranchPress={(branch) => onBranchPress(branch.name)}
         />
 
-        {incompatibleBranches.length > 0 && (
+        {branches.length > 0 && incompatibleBranches.length > 0 && (
           <>
             <Spacer.Vertical size="small" />
             <View px="small">
@@ -67,10 +68,12 @@ export function BranchesScreen({ navigation }: BranchesScreenProps) {
 
   function EmptyList() {
     return (
-      <View px="large">
-        <Spacer.Vertical size="large" />
-        <Heading color="secondary">This app has no published branches yet.</Heading>
-      </View>
+      <EmptyBranchesMessage
+        branches={branches}
+        incompatibleBranches={incompatibleBranches}
+        // TODO - link to docs?
+        onLearnMorePress={() => {}}
+      />
     );
   }
 
