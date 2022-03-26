@@ -31,14 +31,6 @@ export const View = create(RNView, {
             '0': { flexGrow: 0 },
         },
         bg,
-<<<<<<< HEAD
-        border,
-||||||| parent of a6d1e1f66d (add recently created branches to footer of branch list)
-        border: {
-            default: { borderColor: lightTheme.border.default, borderWidth: 1 },
-            hairline: { borderColor: lightTheme.border.default, borderWidth: StyleSheet.hairlineWidth },
-        },
-=======
         opacity: {
             '1': { opacity: 1 },
             '0.5': { opacity: 0.5 },
@@ -72,7 +64,6 @@ export const View = create(RNView, {
             warning: { borderColor: lightTheme.border.warning, borderWidth: 1 },
             error: { borderColor: lightTheme.border.error, borderWidth: 1 },
         },
->>>>>>> a6d1e1f66d (add recently created branches to footer of branch list)
         ...rounded,
         shadow: {
             micro: shadows.micro,
@@ -89,21 +80,7 @@ export const View = create(RNView, {
     selectors: {
         dark: {
             bg: bgDark,
-<<<<<<< HEAD
             border: borderDark,
-||||||| parent of 7f255bf0b5 (implement toast service and add network error messages)
-            border: {
-                default: { borderColor: darkTheme.border.default, borderWidth: 1 },
-                hairline: { borderColor: darkTheme.border.default, borderWidth: StyleSheet.hairlineWidth },
-            },
-=======
-            border: {
-                default: { borderColor: darkTheme.border.default, borderWidth: 1 },
-                hairline: { borderColor: darkTheme.border.default, borderWidth: StyleSheet.hairlineWidth },
-                warning: { borderColor: darkTheme.border.warning, borderWidth: 1 },
-                error: { borderColor: darkTheme.border.error, borderWidth: 1 },
-            },
->>>>>>> 7f255bf0b5 (implement toast service and add network error messages)
         },
         light: {
             bg: {},
