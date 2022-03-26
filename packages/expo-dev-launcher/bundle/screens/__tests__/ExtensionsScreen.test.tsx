@@ -116,7 +116,7 @@ describe('<ExtensionsScreen />', () => {
     });
   });
 
-  test('eas updates empty state', async () => {
+  test('eas updates no compatible branches state', async () => {
     const mockNavigation: any = {
       navigate: jest.fn(),
     };
@@ -125,6 +125,26 @@ describe('<ExtensionsScreen />', () => {
       branchName: 'testBranch',
       updates: [],
       compatibleUpdates: [],
+    });
+
+    const { getByText } = render(<ExtensionsScreen navigation={mockNavigation} />);
+
+    await act(async () => {
+      await waitFor(() => getByText(/no compatible branches/i));
+    });
+  });
+
+  test('eas updates no branches state', async () => {
+    const mockNavigation: any = {
+      navigate: jest.fn(),
+    };
+
+    mockGraphQLResponse({
+      app: {
+        byId: {
+          updateBranches: [],
+        },
+      },
     });
 
     const { getByText } = render(<ExtensionsScreen navigation={mockNavigation} />);

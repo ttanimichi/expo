@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { DeepLinkModal } from '../components/DeepLinkModal';
-import { useModalStack } from '../providers/ModalStackProvider';
 import { addDeepLinkListener, getPendingDeepLink } from '../native-modules/DevLauncherInternal';
+import { useModalStack } from '../providers/ModalStackProvider';
 
 type PendingDeepLinkContext = {
   pendingDeepLink: string;
@@ -37,9 +37,7 @@ export function PendingDeepLinkProvider({
     const listener = addDeepLinkListener((url) => {
       if (url) {
         setPendingDeepLink(url);
-        modalStack.push({
-          element: <DeepLinkModal pendingDeepLink={url} />,
-        });
+        modalStack.push(() => <DeepLinkModal pendingDeepLink={url} />);
       }
     });
 
