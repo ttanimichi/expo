@@ -28,9 +28,7 @@ export function PendingDeepLinkProvider({
     getPendingDeepLink().then((url) => {
       if (url) {
         setPendingDeepLink(url);
-        modalStack.push({
-          element: <DeepLinkModal pendingDeepLink={url} />,
-        });
+        modalStack.push(() => <DeepLinkModal pendingDeepLink={url} />);
       }
     });
   }, []);

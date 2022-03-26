@@ -1,10 +1,13 @@
 import format from 'date-fns/format';
 import { gql } from 'graphql-request';
+import * as React from 'react';
 import { useInfiniteQuery } from 'react-query';
 
 import { apiClient } from '../apiClient';
+import { Toast } from '../components/Toasts';
 import { useBuildInfo } from '../providers/BuildInfoProvider';
 import { queryClient } from '../providers/QueryProvider';
+import { useToastStack } from '../providers/ToastStackProvider';
 import { primeCacheWithUpdates, Update, updatesPageSize } from './useUpdatesForBranch';
 
 const query = gql`
@@ -110,6 +113,7 @@ function getBranchesAsync({
 
 export function useBranchesForApp(appId: string) {
   const { runtimeVersion } = useBuildInfo();
+  const toastStack = useToastStack();
 
   const query = useInfiniteQuery(
     ['branches', appId],
@@ -127,6 +131,14 @@ export function useBranchesForApp(appId: string) {
       },
     }
   );
+
+  React.useEffect(() => {
+    if (query.error) {
+      toastStack.push(() => (
+        <Toast.Error>Something went wrong trying to fetch branches for this app</Toast.Error>
+      ));
+    }
+  }, [query.error]);
 
   const branches =
     query.data?.pages
