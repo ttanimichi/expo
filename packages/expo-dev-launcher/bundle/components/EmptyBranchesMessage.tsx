@@ -30,11 +30,16 @@ export function EmptyBranchesMessage({
             <Heading>This app has no published branches yet.</Heading>
             <Spacer.Vertical size="small" />
 
+            <Spacer.Vertical size="small" />
+            <Text color="secondary" size="small">
+              Branches allow you to deliver code to builds through EAS Update.
+            </Text>
+
             <View py="medium" align="centered">
               <Button.ScaleOnPressContainer bg="tertiary">
                 <View px="2.5" py="2">
                   <Button.Text weight="medium" color="tertiary">
-                    Learn More
+                    Create a branch
                   </Button.Text>
                 </View>
               </Button.ScaleOnPressContainer>
@@ -74,7 +79,7 @@ export function EmptyBranchesMessage({
             <Button.ScaleOnPressContainer bg="tertiary" onPress={onLearnMorePress}>
               <View px="2.5" py="2">
                 <Button.Text weight="medium" color="tertiary">
-                  Learn More
+                  See Available Builds
                 </Button.Text>
               </View>
             </Button.ScaleOnPressContainer>

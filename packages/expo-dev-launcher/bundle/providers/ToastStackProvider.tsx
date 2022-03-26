@@ -1,11 +1,6 @@
+import { Button } from 'expo-dev-client-components';
 import * as React from 'react';
-import {
-  Animated,
-  LayoutRectangle,
-  useWindowDimensions,
-  StyleSheet,
-  Pressable,
-} from 'react-native';
+import { Animated, LayoutRectangle, useWindowDimensions, StyleSheet } from 'react-native';
 
 import {
   createAsyncStack,
@@ -145,9 +140,9 @@ function ToastItem(props: StackItem<ToastStackItem>) {
           transform: [{ translateY }],
         },
       ]}>
-      <Pressable onPress={pop}>
+      <Button.ScaleOnPressContainer onPress={pop}>
         <Element {...props} />
-      </Pressable>
+      </Button.ScaleOnPressContainer>
     </Animated.View>
   );
 }
