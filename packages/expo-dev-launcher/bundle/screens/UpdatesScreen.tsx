@@ -86,7 +86,7 @@ export function UpdatesScreen({ route }: UpdatesScreenProps) {
 
   function EmptyList() {
     return (
-      <View mx="medium" bg="default" rounded="large" padding="medium">
+      <View mt="large" mx="medium" bg="default" rounded="large" padding="medium">
         <View>
           <Heading>There are no updates available for this branch.</Heading>
           <Spacer.Vertical size="small" />

@@ -104,7 +104,7 @@ describe('<BranchesScreen />', () => {
     });
   });
 
-  test('renders incompatible branch message', async () => {
+  test('renders incompatible branch message in footer', async () => {
     const mockNavigation: any = {
       navigate: jest.fn(),
     };
@@ -125,7 +125,7 @@ describe('<BranchesScreen />', () => {
     const incompatibleBranch: Branch = {
       id: '2',
       name: 'Incompatible branch',
-      updates: [],
+      updates: [{ ...testUpdate, id: '2' }],
     };
 
     mockGraphQLResponse({
@@ -176,7 +176,7 @@ describe('<BranchesScreen />', () => {
     const incompatibleBranch: Branch = {
       id: '2',
       name: 'Incompatible branch',
-      updates: [],
+      updates: [{ id: '1', createdAt: '123', message: '321', runtimeVersion: '123' }],
     };
 
     mockGraphQLResponse({
@@ -195,5 +195,6 @@ describe('<BranchesScreen />', () => {
     });
   });
 
+  test.todo('recent empty branches are visible in the footer');
   test.todo('eas updates shows error toast');
 });

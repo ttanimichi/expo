@@ -88,7 +88,8 @@ function getBranchesAsync({
         }),
       };
 
-      const isCompatible = updateBranch.compatibleUpdates.length > 0;
+      const hasNoUpdates = updateBranch.updates.length === 0;
+      const isCompatible = hasNoUpdates || updateBranch.compatibleUpdates.length > 0;
 
       if (isCompatible) {
         branches.push(branch);

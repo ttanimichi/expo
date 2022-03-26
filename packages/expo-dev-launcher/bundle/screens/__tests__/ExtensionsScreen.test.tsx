@@ -123,7 +123,7 @@ describe('<ExtensionsScreen />', () => {
 
     mockBranchResponse({
       branchName: 'testBranch',
-      updates: [],
+      updates: [{ id: '1', message: '123', createdAt: '123', runtimeVersion: '1' }],
       compatibleUpdates: [],
     });
 
